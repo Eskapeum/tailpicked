@@ -1,0 +1,85 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} | TailPicked`} description={post.data.description}>
+  <!-- Article Header -->
+  <header class="bg-gradient-to-br from-[#7C3AED] to-[#9333EA] text-white py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="flex items-center gap-3 mb-4">
+        <a href="/blog" class="text-purple-200 hover:text-white transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i>Back to Blog
+        </a>
+      </div>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-semibold capitalize">
+          {post.data.category}
+        </span>
+        <span class="text-purple-200 text-sm">
+          <i class="fa-regular fa-clock mr-1"></i>{post.data.readTime}
+        </span>
+      </div>
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight font-['Fredoka'] text-white">
+        {post.data.title}
+      </h1>
+      <div class="flex items-center gap-4 text-purple-200 text-sm">
+        <span>
+          <i class="fa-solid fa-user mr-2"></i>{post.data.author}
+        </span>
+        <span>
+          <i class="fa-solid fa-calendar mr-2"></i>
+          {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Article Content -->
+  <article class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="prose prose-lg max-w-none
+        prose-headings:font-bold prose-headings:text-[#1F2937] prose-headings:font-['Fredoka']
+        prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4
+        prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+        prose-p:text-[#6B7280] prose-p:leading-relaxed prose-p:mb-4
+        prose-a:text-[#7C3AED] prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-[#1F2937]
+        prose-code:bg-purple-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-[#7C3AED]
+        prose-pre:bg-[#1F2937] prose-pre:text-gray-100
+        prose-ul:text-[#6B7280] prose-ol:text-[#6B7280]
+        prose-li:my-1
+        prose-blockquote:border-l-4 prose-blockquote:border-[#7C3AED] prose-blockquote:bg-purple-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <!-- Author/Share Section -->
+  <section class="py-12 bg-[#FAF5FF]">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#7C3AED] to-[#9333EA] rounded-full flex items-center justify-center">
+            <i class="fa-solid fa-paw text-white"></i>
+          </div>
+          <div>
+            <p class="font-bold text-[#1F2937] font-['Fredoka']">TailPicked</p>
+            <p class="text-sm text-gray-500">Picked with love. Tested by paws.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Get category counts
+const categories = posts.reduce((acc, post) => {
+  const cat = post.data.category;
+  acc[cat] = (acc[cat] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+---
+
+<Layout title="TailPicked | Honest Pet Product Reviews">
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-[#1F2937] font-['Fredoka'] mb-4">
+        Pet Product Reviews
+      </h1>
+      <p class="text-lg text-[#6B7280] max-w-2xl mx-auto">
+        Honest reviews and recommendations for dogs and cats. We test products so you don't have to.
+      </p>
+    </div>
+
+    <!-- Search -->
+    <div class="max-w-md mx-auto mb-8">
+      <div class="relative">
+        <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF]"></i>
+        <input
+          type="text"
+          placeholder="Search articles..."
+          class="w-full pl-12 pr-4 py-3 border border-purple-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#7C3AED] bg-white"
+        />
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="bg-[#FAF5FF] rounded-2xl p-6 mb-8 border border-purple-100">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-[#1F2937] font-['Fredoka']">Weekly Newsletter</h2>
+          <p class="text-[#6B7280] text-sm">Get pet product reviews delivered to your inbox</p>
+        </div>
+        <form class="flex gap-2">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="px-4 py-2 border border-purple-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#7C3AED] bg-white text-sm"
+            required
+          />
+          <button type="submit" class="bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-6 py-2 rounded-full font-semibold text-sm transition-colors">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+      <div class="flex items-center gap-2 text-[#6B7280]">
+        <i class="fa-solid fa-filter"></i>
+        <span class="font-medium">Filter by Category</span>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button class="bg-[#7C3AED] text-white px-4 py-2 rounded-full text-sm font-medium">
+          All <span class="opacity-75">({posts.length})</span>
+        </button>
+        {Object.entries(categories).map(([cat, count]) => (
+          <a href={`/${cat}`} class="bg-white border border-purple-200 text-[#6B7280] hover:border-[#7C3AED] hover:text-[#7C3AED] px-4 py-2 rounded-full text-sm font-medium transition-colors capitalize">
+            {cat} <span class="opacity-75">({count})</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Post Count -->
+    <p class="text-[#6B7280] mb-6">Showing {posts.length} posts</p>
+
+    <!-- Articles Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map((post) => (
+        <a href={`/blog/${post.slug}`} class="bg-white rounded-xl border border-purple-100 hover:shadow-lg transition-all group overflow-hidden">
+          <div class="p-6">
+            <span class="inline-block bg-[#7C3AED] text-white text-xs px-3 py-1 rounded-full font-medium capitalize mb-3">
+              {post.data.category}
+            </span>
+            <h2 class="text-lg font-bold text-[#1F2937] font-['Fredoka'] mb-2 group-hover:text-[#7C3AED] transition-colors line-clamp-2">
+              {post.data.title}
+            </h2>
+            <p class="text-[#6B7280] text-sm mb-4 line-clamp-2">
+              {post.data.description}
+            </p>
+            <div class="flex items-center justify-between text-xs text-[#9CA3AF]">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center gap-1">
+                  <i class="fa-regular fa-clock"></i>
+                  {post.data.readTime}
+                </span>
+              </div>
+              <span>{new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all blog posts and sort by date
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Category colors
+const categoryColors: Record<string, string> = {
+  reviews: 'bg-[#7C3AED]',
+  guides: 'bg-[#10B981]',
+  health: 'bg-[#F59E0B]'
+};
+---
+
+<Layout title="Blog | TailPicked" description="Vet-reviewed, pet-tested product reviews and guides for devoted pet parents.">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[#7C3AED] to-[#9333EA] text-white py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="bg-white/20 text-white text-sm font-semibold px-4 py-1 rounded-full">
+          <i class="fa-solid fa-newspaper mr-2"></i>blog
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 font-['Fredoka'] text-white">Latest Articles</h1>
+      <p class="text-xl text-purple-100 max-w-2xl">
+        Vet-reviewed guides and honest product reviews for pet parents who want the best for their fur babies.
+      </p>
+    </div>
+  </section>
+
+  <!-- Blog Posts -->
+  <section class="py-16 bg-[#FAF5FF]">
+    <div class="max-w-6xl mx-auto px-4">
+      {posts.length === 0 ? (
+        <div class="text-center py-16">
+          <i class="fa-solid fa-paw text-6xl text-purple-200 mb-4"></i>
+          <p class="text-gray-500">No articles yet. Check back soon!</p>
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <article class="bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-shadow border border-purple-100 group">
+              <div class="relative h-40 bg-gradient-to-br from-[#7C3AED] to-[#9333EA] flex items-center justify-center">
+                <i class="fa-solid fa-paw text-5xl text-white/30"></i>
+                <div class="absolute top-4 left-4 flex items-center gap-2">
+                  <span class={`${categoryColors[post.data.category] || 'bg-[#7C3AED]'} text-white text-xs px-3 py-1 rounded-full font-semibold capitalize`}>
+                    {post.data.category}
+                  </span>
+                  <span class="text-xs text-purple-200">
+                    <i class="fa-regular fa-clock mr-1"></i>{post.data.readTime}
+                  </span>
+                </div>
+              </div>
+              <div class="p-6">
+                <time class="text-xs text-gray-400 mb-2 block">
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </time>
+                <h3 class="text-lg font-bold text-[#1F2937] mb-2 group-hover:text-[#7C3AED] transition-colors line-clamp-2 font-['Fredoka']">
+                  {post.data.title}
+                </h3>
+                <p class="text-[#6B7280] text-sm mb-4 line-clamp-2">
+                  {post.data.description}
+                </p>
+                <a href={`/blog/${post.slug}`} class="text-[#7C3AED] font-semibold text-sm hover:underline flex items-center gap-2">
+                  Read Article <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,178 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Picked with love. Tested by paws. Your trusted guide for pet products, reviews, and recommendations for dogs and cats." } = Astro.props;
+const currentYear = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="pet products, dog food reviews, cat litter, pet toys, dog beds, cat trees, pet health, pet safety" />
+    <meta name="author" content="TailPicked" />
+    <meta property="og:title" content={`${title} | TailPicked`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
+    <link rel="canonical" href="https://tailpicked.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>{title} | TailPicked</title>
+  </head>
+  <body class="bg-white text-[#6B7280] min-h-screen flex flex-col font-['Poppins']">
+    <!-- Top Bar -->
+    <div class="bg-[#7C3AED] text-white py-2 text-sm">
+      <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+        <span class="hidden sm:inline"><i class="fa-solid fa-envelope mr-2"></i>hello@tailpicked.com</span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="border-b border-purple-100 bg-white sticky top-0 z-50 shadow-sm">
+      <nav class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="flex items-center">
+          <img src="/images/logo.png" alt="TailPicked" class="h-10 md:h-12 w-auto" />
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="/dogs" class="font-medium hover:text-[#7C3AED] transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-dog text-sm"></i> Dogs
+          </a>
+          <a href="/cats" class="font-medium hover:text-[#7C3AED] transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-cat text-sm"></i> Cats
+          </a>
+          <a href="/reviews" class="font-medium hover:text-[#7C3AED] transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-star text-sm"></i> Reviews
+          </a>
+          <a href="/guides" class="font-medium hover:text-[#7C3AED] transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-book text-sm"></i> Guides
+          </a>
+          <a href="/about" class="font-medium hover:text-[#7C3AED] transition-colors">About</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-[#7C3AED]" aria-label="Toggle menu">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-purple-100 px-4 py-4">
+        <div class="flex flex-col gap-4">
+          <a href="/dogs" class="font-medium hover:text-[#7C3AED] py-2"><i class="fa-solid fa-dog mr-2"></i>Dogs</a>
+          <a href="/cats" class="font-medium hover:text-[#7C3AED] py-2"><i class="fa-solid fa-cat mr-2"></i>Cats</a>
+          <a href="/reviews" class="font-medium hover:text-[#7C3AED] py-2"><i class="fa-solid fa-star mr-2"></i>Reviews</a>
+          <a href="/guides" class="font-medium hover:text-[#7C3AED] py-2"><i class="fa-solid fa-book mr-2"></i>Guides</a>
+          <a href="/about" class="font-medium hover:text-[#7C3AED] py-2"><i class="fa-solid fa-users mr-2"></i>About</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- Pre-Footer CTA -->
+    <section class="bg-gradient-to-r from-[#7C3AED] to-[#9333EA] py-12">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 font-['Fredoka']">Find the Perfect Products for Your Fur Baby</h2>
+        <p class="text-purple-100 mb-6 text-lg">Vet-reviewed. Pet-tested. Parent-approved.</p>
+        <a href="/reviews" class="inline-flex items-center gap-2 bg-[#F59E0B] hover:bg-[#D97706] text-white px-8 py-3 rounded-full font-semibold transition-colors">
+          <i class="fa-solid fa-paw"></i> Browse Reviews
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#FAF5FF] border-t border-purple-100">
+      <div class="max-w-6xl mx-auto px-4 py-12">
+        <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+          <!-- Brand Column -->
+          <div class="lg:col-span-2">
+            <div class="mb-4">
+              <img src="/images/logo.png" alt="TailPicked" class="h-12 w-auto" />
+            </div>
+            <p class="text-[#6B7280] text-sm mb-4 leading-relaxed">Picked with love. Tested by paws. We're the pet-obsessed friend who researches everything so you can spoil your fur baby with confidence.</p>
+            <p class="text-[#9CA3AF] text-sm"><i class="fa-solid fa-envelope mr-2 text-[#7C3AED]"></i>hello@tailpicked.com</p>
+          </div>
+
+          <!-- For Dogs -->
+          <div>
+            <h4 class="font-semibold text-[#7C3AED] mb-4 font-['Fredoka']"><i class="fa-solid fa-dog mr-2"></i>For Dogs</h4>
+            <ul class="space-y-3 text-sm text-[#6B7280]">
+              <li><a href="/dogs/food" class="hover:text-[#F59E0B] transition-colors">Dog Food</a></li>
+              <li><a href="/dogs/toys" class="hover:text-[#F59E0B] transition-colors">Toys</a></li>
+              <li><a href="/dogs/beds" class="hover:text-[#F59E0B] transition-colors">Beds & Crates</a></li>
+              <li><a href="/dogs/health" class="hover:text-[#F59E0B] transition-colors">Health & Wellness</a></li>
+              <li><a href="/dogs/training" class="hover:text-[#F59E0B] transition-colors">Training Supplies</a></li>
+            </ul>
+          </div>
+
+          <!-- For Cats -->
+          <div>
+            <h4 class="font-semibold text-[#7C3AED] mb-4 font-['Fredoka']"><i class="fa-solid fa-cat mr-2"></i>For Cats</h4>
+            <ul class="space-y-3 text-sm text-[#6B7280]">
+              <li><a href="/cats/food" class="hover:text-[#F59E0B] transition-colors">Cat Food</a></li>
+              <li><a href="/cats/litter" class="hover:text-[#F59E0B] transition-colors">Litter & Boxes</a></li>
+              <li><a href="/cats/trees" class="hover:text-[#F59E0B] transition-colors">Cat Trees</a></li>
+              <li><a href="/cats/toys" class="hover:text-[#F59E0B] transition-colors">Toys & Scratchers</a></li>
+              <li><a href="/cats/health" class="hover:text-[#F59E0B] transition-colors">Health & Grooming</a></li>
+            </ul>
+          </div>
+
+          <!-- Company -->
+          <div>
+            <h4 class="font-semibold text-[#7C3AED] mb-4 font-['Fredoka']">Company</h4>
+            <ul class="space-y-3 text-sm text-[#6B7280]">
+              <li><a href="/about" class="hover:text-[#F59E0B] transition-colors">About Us</a></li>
+              <li><a href="/methodology" class="hover:text-[#F59E0B] transition-colors">How We Test</a></li>
+              <li><a href="/contact" class="hover:text-[#F59E0B] transition-colors">Contact</a></li>
+              <li><a href="/privacy" class="hover:text-[#F59E0B] transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" class="hover:text-[#F59E0B] transition-colors">Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-purple-200 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#9CA3AF]">
+          <div class="flex flex-col sm:flex-row items-center gap-2">
+            <p>&copy; {currentYear} TailPicked. All rights reserved. Made with <i class="fa-solid fa-heart text-[#F59E0B]"></i> for pets everywhere.</p>
+            <span class="hidden sm:inline text-purple-300">|</span>
+            <p class="text-xs opacity-70">A <span class="text-[#7C3AED]">S2F Affiliates</span> brand</p>
+          </div>
+          <p class="flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-[#7C3AED]"></i>
+            Affiliate Disclosure: We may earn commissions from qualifying purchases.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      menuBtn?.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('hidden');
+        const icon = menuBtn.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('fa-bars');
+          icon.classList.toggle('fa-xmark');
+        }
+      });
+    </script>
+  </body>
+</html>
